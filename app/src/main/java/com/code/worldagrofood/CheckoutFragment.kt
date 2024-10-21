@@ -10,9 +10,9 @@ import android.widget.Toast
 
 class CheckoutFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var editBuildingBlock: EditText
-    private lateinit var editOfficeNumber: EditText
-    private lateinit var btnPlaceOrder: Button
+    private lateinit var officeBlockEditText: EditText
+    private lateinit var officeNumberEditText: EditText
+    private lateinit var placeOrderButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,31 +21,17 @@ class CheckoutFragment : androidx.fragment.app.Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_checkout, container, false)
 
-        // Initialize views
-        editBuildingBlock = view.findViewById(R.id.editBuildingBlock)
-        editOfficeNumber = view.findViewById(R.id.editOfficeNumber)
-        btnPlaceOrder = view.findViewById(R.id.btnPlaceOrder)
+        // Initialize EditTexts and Button
+        officeBlockEditText = view.findViewById(R.id.office_block_edit_text)
+        officeNumberEditText=view.findViewById(R.id.office_number_edit_text)
+        placeOrderButton = view.findViewById(R.id.place_order_button)
 
-        // Handle order placement
-        btnPlaceOrder.setOnClickListener {
-            placeOrder()
+        placeOrderButton.setOnClickListener {
+
         }
 
         return view
     }
-
-    private fun placeOrder() {
-        val buildingBlock = editBuildingBlock.text.toString()
-        val officeNumber = editOfficeNumber.text.toString()
-
-        if (buildingBlock.isNotEmpty() && officeNumber.isNotEmpty()) {
-            // Place the order, e.g., save it to Firebase
-            Toast.makeText(context, "Order placed successfully!", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
 
 }

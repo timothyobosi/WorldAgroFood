@@ -10,17 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MenuFragment : Fragment() {
 
-    private lateinit var recyclerMenu: RecyclerView
-    private lateinit var foodAdapter: FoodAdapter
-    private lateinit var foodList: MutableList<Food>
+    private lateinit var menuRecyclerView: RecyclerView
+    private lateinit var menuAdapter: FoodAdapter
+    private lateinit var menuList: MutableList<Food>
 
     companion object {
-        private const val ARG_CATEGORY = "category"
 
         fun newInstance(category: Category): MenuFragment {
             val fragment = MenuFragment()
             val args = Bundle()
-            args.putParcelable(ARG_CATEGORY, category)
+            args.putParcelable("category", category)
             fragment.arguments = args
             return fragment
         }
@@ -33,33 +32,32 @@ class MenuFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
 
-        // Initialize RecyclerView
-        recyclerMenu = view.findViewById(R.id.recyclerMenu)
+        //Initialize RecyclerView
+        menuRecyclerView = view.findViewById(R.id.menu_recycler_view)
 
-        // Set up RecyclerView
-        foodList = mutableListOf()  // Will fetch data from Firebase or local
-        foodAdapter = FoodAdapter(foodList) { food ->
-            // Handle food item click, e.g., add to cart
+
+        //dummy food items ( we will  replace with actual logic)
+        menuList = mutableListOf(
+            Food("Latte", 250.0,1),
+            Food("Espresso",200.0,1)
+        )
+
+        // Set up the RecyclerView with the FoodAdapter and handle item clicks
+        menuAdapter = FoodAdapter(menuList) { foodItem ->
+            // Handle item click (e.g., add to cart or navigate to food details)
+            // You can show a toast or add the food item to the cart
         }
 
-        recyclerMenu.apply {
+        menuRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = foodAdapter
+            adapter = menuAdapter
         }
 
-        // Load food items for the selected category
-        val category = arguments?.getParcelable<Category>(ARG_CATEGORY)
-        loadFoodItems(category)
+        return view
 
         return view
     }
 
-    private fun loadFoodItems(category: Category?) {
-        // Load food items based on the selected category (use Firebase or static data)
-        foodList.add(Food("Burger", 5.99))
-        foodList.add(Food("Pizza", 8.99))
-        foodAdapter.notifyDataSetChanged()
-    }
 
 
 

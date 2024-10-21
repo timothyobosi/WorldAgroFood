@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class FragmentCart : Fragment() {
 
-    private lateinit var recyclerCart: RecyclerView
+    private lateinit var cartRecyclerView: RecyclerView
     private lateinit var cartAdapter: CartAdapter
     private lateinit var cartList: MutableList<Food>
-    private lateinit var btnCheckout: Button
+    private lateinit var checkoutButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,44 +24,38 @@ class FragmentCart : Fragment() {
         val view = inflater.inflate(R.layout.fragment_cart, container, false)
 
         // Initialize RecyclerView and checkout button
-        recyclerCart = view.findViewById(R.id.recyclerCart)
-        btnCheckout = view.findViewById(R.id.btnCheckout)
+        cartRecyclerView = view.findViewById(R.id.cart_recycler_view)
+        checkoutButton = view.findViewById(R.id.checkout_button)
 
-        // Set up RecyclerView
-        cartList = mutableListOf()  // Will fetch from cart data source
-        cartAdapter = CartAdapter(cartList) { food ->
-            // Handle cart item removal or quantity change
+        //Dummy cart items(replace with actual logic)
+        cartList = mutableListOf(
+            Food("Coffee", 150.0,2),
+            Food("Salad",100.0,1)
+        )
+
+        cartAdapter = CartAdapter(cartList){itemToRemove->
+
+            // Remove the item from the cart and notify the adapter
+            cartList.remove(itemToRemove)
+            cartAdapter.notifyDataSetChanged()
+
         }
 
-        recyclerCart.apply {
+        cartRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = cartAdapter
+            adapter  = cartAdapter
         }
 
-        // Load cart items
-        loadCartItems()
-
-        // Handle checkout button click
-        btnCheckout.setOnClickListener {
-            navigateToCheckoutFragment()
+        //handle checkout button click
+        checkoutButton.setOnClickListener {
+            val fragment = CheckoutFragment()
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContainer, fragment)
+                ?.addToBackStack(null)
+                ?.commit()
         }
 
         return view
-    }
-
-    private fun loadCartItems() {
-        // Load cart items (use local data or fetch from Firebase)
-        cartList.add(Food("Burger", 5.99, 2))
-        cartList.add(Food("Pizza", 8.99, 1))
-        cartAdapter.notifyDataSetChanged()
-    }
-
-    private fun navigateToCheckoutFragment() {
-        val checkoutFragment = CheckoutFragment()
-        fragmentManager?.beginTransaction()
-            ?.replace(R.id.fragmentContainer, checkoutFragment)
-            ?.addToBackStack(null)
-            ?.commit()
     }
 
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,10 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HomeFragment : Fragment() {
 
-    private lateinit var recyclerCategories: RecyclerView
-    private lateinit var imgOffersBanner: ImageView
-    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var categoryList: MutableList<Category>  // Change here
+    private lateinit var searchBar:EditText
+    private lateinit var eateriesRecyclerView: RecyclerView
+    private lateinit var eateriesAdapter: CategoryAdapter
+    private lateinit var eateriesList: MutableList<Category>
+
+
+    private lateinit var featuredDishesRecyclerView: RecyclerView
+    private lateinit var promotionsRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,49 +28,34 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Initialize views
-        recyclerCategories = view.findViewById(R.id.recyclerCategories)
-        imgOffersBanner = view.findViewById(R.id.imgOffersBanner)
+        // Initialize search bar and RecyclerView
+        searchBar = view.findViewById(R.id.search_bar)
+        eateriesRecyclerView = view.findViewById(R.id.eateries_recycler_view)
 
-        // Set up RecyclerView for categories
-        categoryList = mutableListOf()  // Will fetch data from Firebase or a local list
-        categoryAdapter = CategoryAdapter(categoryList) { category ->
-            // Handle category click
-            navigateToMenuFragment(category)
+        //Set up RecyclerView
+        eateriesList = mutableListOf(
+            Category("Evergreen",R.drawable.evergreen),
+            Category("Coffee Shop",R.drawable.coffeeshop),
+            Category("Main Cafeteria",R.drawable.main_cafeteria)
+        )
+
+        eateriesAdapter = CategoryAdapter(eateriesList){ category ->
+            //Handle eatery click(navigate to MenuFragment for the selected eatery
+            val fragment = MenuFragment.newInstance(category)
+            childFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContainer, fragment)
+                ?.addToBackStack(null)
+                ?.commit()
+
         }
 
-        recyclerCategories.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = categoryAdapter
+        eateriesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = eateriesAdapter
         }
-
-        // Load categories and offers banner
-        loadCategories()
-        loadOffersBanner()
 
         return view
-    }
 
-    private fun loadCategories() {
-        // Load categories data into the categoryList
-        categoryList.add(Category("Beverages"))
-        categoryList.add(Category("Meals"))
-        categoryList.add(Category("Desserts"))
-        categoryAdapter.notifyDataSetChanged()
-    }
-
-    private fun loadOffersBanner() {
-        // Load image into offers banner
-        imgOffersBanner.setImageResource(R.drawable.offer_banner) // Ensure this drawable exists
-    }
-
-    private fun navigateToMenuFragment(category: Category) {
-        // Navigate to MenuFragment with the selected category
-        val menuFragment = MenuFragment.newInstance(category)
-        fragmentManager?.beginTransaction()
-            ?.replace(R.id.fragmentContainer, menuFragment)
-            ?.addToBackStack(null)
-            ?.commit()
     }
 
 

@@ -7,15 +7,20 @@
 
     <!-- Cart items RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCart"
+        android:id="@+id/cart_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbars="vertical"
         android:layout_weight="1"/>
 
     <!-- Checkout Button -->
     <Button
-        android:id="@+id/btnCheckout"
+        android:id="@+id/checkout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checkout"/>
+        android:text="Proceed to Checkout"
+        android:background="@color/primaryColor"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        />
 </LinearLayout>

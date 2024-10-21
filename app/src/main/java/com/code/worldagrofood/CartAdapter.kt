@@ -7,8 +7,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CartAdapter(private val cartList: List<Food>, private val onItemRemoved: (Food) -> Unit) :
-    RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(
+    private val cartList: List<Food>,
+    private val onItemRemoved: (Food) -> Unit
+) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val foodName: TextView = itemView.findViewById(R.id.foodName)
